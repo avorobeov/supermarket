@@ -1,0 +1,193 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace supermarket
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Supermarket supermarket = new Supermarket();
+
+            supermarket.FillingShowcase();
+            supermarket.GetShopping();
+            supermarket.ServeCustomers();
+        }
+    }
+
+    class Supermarket
+    {
+        private Random _random = new Random();
+
+        private Queue<Buyer> _buyers = new Queue<Buyer>();
+        private List<Commodity> _showcase = new List<Commodity>();
+        private List<Buyer> buyers = new List<Buyer> { new Buyer("Dima",100),
+                                                       new Buyer("Vasa",10),
+                                                       new Buyer("Kiril",25),
+                                                       new Buyer("Den",30)};
+
+        public void ServeCustomers()
+        {
+            Buyer buyer;
+
+            while (_buyers.Count != 0)
+            {
+                buyer = _buyers.Dequeue();
+
+                bool havePurchase = false;
+
+                while (havePurchase == false)
+                {
+                    int amountPurchases = GetAmountPurchases(buyer);
+
+                    if (buyer.Money >= amountPurchases && buyer.CountPurchases != 0)
+                    {
+                        buyer.BalanceReduction(amountPurchases);
+
+                        ShowPurchases(buyer);
+
+                        ShowMessage($"\nПокупка совершена успешно вот ваша сдача: {buyer.Money}\n", ConsoleColor.Green);
+
+                        havePurchase = true;
+                    }
+                    else if (buyer.CountPurchases == 0)
+                    {
+                        ShowMessage("\nВам не хватило денег на покупку тех товаров, что вы выбрали\n", ConsoleColor.DarkMagenta);
+                      
+                        havePurchase = true;
+                    }
+                    else
+                    {
+                        ShowMessage("\nНедостаточно денег для покупки\nВложите какой-либо  товар\n", ConsoleColor.Red);
+                        buyer.Deleteurchase();
+                    }
+                }
+
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+
+        public void GetShopping()
+        {
+            int maximumNumberPurchases = 10;
+            int minimalNumberPurchases = 1;
+
+            for (int i = 0; i < buyers.Count; i++)
+            {
+                for (int p = 0; p < _random.Next(0,maximumNumberPurchases); p++)
+                {
+                    buyers[i].TakeShopping(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
+                }
+
+                _buyers.Enqueue(buyers[i]);
+            }
+        }
+
+        public void FillingShowcase()
+        {
+            _showcase.Add(new Commodity("Рыба", 10));
+            _showcase.Add(new Commodity("Мясо", 20));
+            _showcase.Add(new Commodity("Колбаса", 15));
+            _showcase.Add(new Commodity("Печение", 20));
+        }
+
+        private int GetAmountPurchases(Buyer buyer)
+        {
+            List<Commodity> shopping = buyer.GetShoppingList();
+
+            int sum = 0;
+
+            for (int i = 0; i < shopping.Count; i++)
+            {
+                sum += shopping[i].Price;
+            }
+
+            return sum;
+        }
+
+        private void ShowMessage(string message, ConsoleColor color)
+        {
+            ConsoleColor preliminaryColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+
+            Console.ForegroundColor = preliminaryColor;
+        }
+      
+        private void ShowPurchases(Buyer buyer)
+        {
+            List<Commodity> shopping = buyer.GetShoppingList();
+
+            ShowMessage("Список ваших покупок:\n", ConsoleColor.Blue);
+
+            for (int i = 0; i < shopping.Count; i++)
+            {
+                ShowMessage(shopping[i].Title + "\n", ConsoleColor.Yellow);
+            }
+        }
+    }
+
+    class Commodity
+    {
+        public string Title { get; private set; }
+        public int Price { get; private set; }
+
+        public Commodity(string title,int price)
+        {
+            Title = title;
+            Price = price;
+        }
+    }
+
+    class Buyer
+    {
+        private List<Commodity> commodities = new List<Commodity>();
+
+        public string Name { get; private set; }
+        public int Money { get; private set; }
+        public int CountPurchases
+        {
+            get
+            {
+                return commodities.Count;
+            }
+        }
+        public Buyer(string name, int money)
+        {
+            Name = name;
+            Money = money;
+        }
+
+        public void TakeShopping(Commodity commodity)
+        {
+            commodities.Add(commodity);
+        }
+
+        public List<Commodity> GetShoppingList()
+        {
+            return commodities;
+        }
+
+        public void BalanceReduction(int sum)
+        {
+            Money -= sum;
+        }
+
+        public void Deleteurchase()
+        {
+            Random random = new Random();
+
+            int noItems = 0;
+
+            if (commodities.Count != noItems) 
+            {
+                commodities.RemoveAt(random.Next(0, commodities.Count));
+            }
+        }
+    }
+}
