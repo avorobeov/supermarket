@@ -22,9 +22,9 @@ namespace supermarket
     {
         private Random _random = new Random();
 
-        private Queue<Buyer> _buyers = new Queue<Buyer>();
+        private Queue<Buyer> _queueBuyers = new Queue<Buyer>();
         private List<Commodity> _showcase = new List<Commodity>();
-        private List<Buyer> buyers = new List<Buyer> { new Buyer("Dima",100),
+        private List<Buyer> _buyers = new List<Buyer> { new Buyer("Dima",100),
                                                        new Buyer("Vasa",10),
                                                        new Buyer("Kiril",25),
                                                        new Buyer("Den",30)};
@@ -33,9 +33,9 @@ namespace supermarket
         {
             Buyer buyer;
 
-            while (_buyers.Count != 0)
+            while (_queueBuyers.Count != 0)
             {
-                buyer = _buyers.Dequeue();
+                buyer = _queueBuyers.Dequeue();
 
                 bool havePurchase = false;
 
@@ -62,6 +62,7 @@ namespace supermarket
                     else
                     {
                         ShowMessage("\nНедостаточно денег для покупки\nВложите какой-либо  товар\n", ConsoleColor.Red);
+                      
                         buyer.Deleteurchase();
                     }
                 }
@@ -76,14 +77,14 @@ namespace supermarket
             int maximumNumberPurchases = 10;
             int minimalNumberPurchases = 1;
 
-            for (int i = 0; i < buyers.Count; i++)
+            for (int i = 0; i < _buyers.Count; i++)
             {
                 for (int p = 0; p < _random.Next(0,maximumNumberPurchases); p++)
                 {
-                    buyers[i].TakeShopping(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
+                    _buyers[i].TakeShopping(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
                 }
 
-                _buyers.Enqueue(buyers[i]);
+                _queueBuyers.Enqueue(_buyers[i]);
             }
         }
 
@@ -157,6 +158,7 @@ namespace supermarket
                 return commodities.Count;
             }
         }
+      
         public Buyer(string name, int money)
         {
             Name = name;
