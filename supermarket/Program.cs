@@ -147,7 +147,7 @@ namespace supermarket
 
     class Buyer
     {
-        private List<Commodity> commodities = new List<Commodity>();
+        private List<Commodity> _commodities = new List<Commodity>();
 
         public string Name { get; private set; }
         public int Money { get; private set; }
@@ -155,7 +155,7 @@ namespace supermarket
         {
             get
             {
-                return commodities.Count;
+                return _commodities.Count;
             }
         }
       
@@ -167,12 +167,12 @@ namespace supermarket
 
         public void TakeShopping(Commodity commodity)
         {
-            commodities.Add(commodity);
+            _commodities.Add(commodity);
         }
 
         public List<Commodity> GetShoppingList()
         {
-            return commodities;
+            return _commodities;
         }
 
         public void BalanceReduction(int sum)
@@ -186,9 +186,9 @@ namespace supermarket
 
             int noItems = 0;
 
-            if (commodities.Count != noItems) 
+            if (_commodities.Count != noItems) 
             {
-                commodities.RemoveAt(random.Next(0, commodities.Count));
+                _commodities.RemoveAt(random.Next(0, _commodities.Count));
             }
         }
     }
