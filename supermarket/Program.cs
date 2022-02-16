@@ -10,7 +10,17 @@ namespace supermarket
     {
         static void Main(string[] args)
         {
-            Supermarket supermarket = new Supermarket();
+            List<Buyer> buyers = new List<Buyer>{new Buyer("Dima", 100),
+                                                 new Buyer("Vasa", 10),
+                                                 new Buyer("Kiril", 25),
+                                                 new Buyer("Den", 30) };
+
+            List<Commodity> showcase = new List<Commodity> { new Commodity("Рыба", 10),
+                                                             new Commodity("Мясо", 20),
+                                                             new Commodity("Колбаса", 15),
+                                                             new Commodity("Печение", 20)};
+
+            Supermarket supermarket = new Supermarket(buyers, showcase);
         }
     }
 
@@ -22,17 +32,10 @@ namespace supermarket
         private List<Commodity> _showcase = new List<Commodity>();
         private List<Buyer> _buyers = new List<Buyer>();
 
-        public Supermarket()
+        public Supermarket(List<Buyer> buyers, List<Commodity> showcase)
         {
-            FillingListBuyers(new Buyer("Dima", 100));
-            FillingListBuyers(new Buyer("Vasa", 10));
-            FillingListBuyers(new Buyer("Kiril", 25));
-            FillingListBuyers(new Buyer("Den", 30));
-
-            FillShowcase(new Commodity("Рыба", 10));
-            FillShowcase(new Commodity("Мясо", 20));
-            FillShowcase(new Commodity("Колбаса", 15));
-            FillShowcase(new Commodity("Печение", 20));
+            _buyers = buyers;
+            _showcase = showcase;
 
             CreatePurchase();
 
