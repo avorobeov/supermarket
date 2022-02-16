@@ -102,16 +102,6 @@ namespace supermarket
             }
         }
 
-        public void FillShowcase(Commodity commodity)
-        {
-            _showcase.Add(commodity);
-        }
-
-        public void FillingListBuyers(Buyer buyer)
-        {
-            _buyers.Add(buyer);
-        }
-
         private void ShowMessage(string message, ConsoleColor color)
         {
             ConsoleColor preliminaryColor = Console.ForegroundColor;
