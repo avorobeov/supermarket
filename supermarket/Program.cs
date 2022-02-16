@@ -11,15 +11,6 @@ namespace supermarket
         static void Main(string[] args)
         {
             Supermarket supermarket = new Supermarket();
-
-            supermarket.FillingListBuyers(new Buyer("Dima", 100));
-            supermarket.FillingListBuyers(new Buyer("Vasa", 10));
-            supermarket.FillingListBuyers(new Buyer("Kiril", 25));
-            supermarket.FillingListBuyers(new Buyer("Den", 30));
-
-            supermarket.FillShowcase();
-            supermarket.CreatePurchase();
-            supermarket.ServeCustomers();
         }
     }
 
@@ -30,6 +21,23 @@ namespace supermarket
         private Queue<Buyer> _queueBuyers = new Queue<Buyer>();
         private List<Commodity> _showcase = new List<Commodity>();
         private List<Buyer> _buyers = new List<Buyer>();
+
+        public Supermarket()
+        {
+            FillingListBuyers(new Buyer("Dima", 100));
+            FillingListBuyers(new Buyer("Vasa", 10));
+            FillingListBuyers(new Buyer("Kiril", 25));
+            FillingListBuyers(new Buyer("Den", 30));
+
+            FillShowcase(new Commodity("Рыба", 10));
+            FillShowcase(new Commodity("Мясо", 20));
+            FillShowcase(new Commodity("Колбаса", 15));
+            FillShowcase(new Commodity("Печение", 20));
+
+            CreatePurchase();
+
+            ServeCustomers();
+        }
 
         public void ServeCustomers()
         {
@@ -43,13 +51,13 @@ namespace supermarket
 
                 while (havePurchase == false)
                 {
-                    int amountPurchases = GetAmountPurchases(buyer);
+                    int amountPurchases = buyer.GetAmountPurchases(buyer);
 
                     if (buyer.Money >= amountPurchases && buyer.CountPurchases != 0)
                     {
-                        buyer.BalanceReduction(amountPurchases);
+                        buyer.DecreaseBalance(amountPurchases);
 
-                        ShowPurchases(buyer);
+                        buyer.ShowPurchases();
 
                         ShowMessage($"\nПокупка совершена успешно вот ваша сдача: {buyer.Money}\n", ConsoleColor.Green);
 
@@ -65,7 +73,7 @@ namespace supermarket
                     {
                         ShowMessage("\nНедостаточно денег для покупки\nВложите какой-либо  товар\n", ConsoleColor.Red);
                       
-                        buyer.Deleteurchase();
+                        buyer.DeletePurchase();
                     }
                 }
 
@@ -76,12 +84,15 @@ namespace supermarket
 
         public void CreatePurchase()
         {
+            int numberPurchases;
             int maximumNumberPurchases = 10;
             int minimalNumberPurchases = 1;
 
             for (int i = 0; i < _buyers.Count; i++)
             {
-                for (int p = 0; p < _random.Next(0,maximumNumberPurchases); p++)
+                numberPurchases = _random.Next(0, maximumNumberPurchases);
+
+                for (int p = 0; p < numberPurchases; p++)
                 {
                     _buyers[i].TakePurchase(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
                 }
@@ -90,31 +101,14 @@ namespace supermarket
             }
         }
 
-        public void FillShowcase()
+        public void FillShowcase(Commodity commodity)
         {
-            _showcase.Add(new Commodity("Рыба", 10));
-            _showcase.Add(new Commodity("Мясо", 20));
-            _showcase.Add(new Commodity("Колбаса", 15));
-            _showcase.Add(new Commodity("Печение", 20));
+            _showcase.Add(commodity);
         }
 
         public void FillingListBuyers(Buyer buyer)
         {
             _buyers.Add(buyer);
-        }
-
-        private int GetAmountPurchases(Buyer buyer)
-        {
-            List<Commodity> Purchase = buyer.GetPurchaseList();
-
-            int sum = 0;
-
-            for (int i = 0; i < Purchase.Count; i++)
-            {
-                sum += Purchase[i].Price;
-            }
-
-            return sum;
         }
 
         private void ShowMessage(string message, ConsoleColor color)
@@ -125,18 +119,6 @@ namespace supermarket
             Console.WriteLine(message);
 
             Console.ForegroundColor = preliminaryColor;
-        }
-      
-        private void ShowPurchases(Buyer buyer)
-        {
-            List<Commodity> shopping = buyer.GetPurchaseList();
-
-            ShowMessage("Список ваших покупок:\n", ConsoleColor.Blue);
-
-            for (int i = 0; i < shopping.Count; i++)
-            {
-                ShowMessage(shopping[i].Title + "\n", ConsoleColor.Yellow);
-            }
         }
     }
 
@@ -158,13 +140,7 @@ namespace supermarket
 
         public string Name { get; private set; }
         public int Money { get; private set; }
-        public int CountPurchases
-        {
-            get
-            {
-                return _commodities.Count;
-            }
-        }
+        public int CountPurchases => _commodities.Count;
       
         public Buyer(string name, int money)
         {
@@ -177,17 +153,17 @@ namespace supermarket
             _commodities.Add(commodity);
         }
 
-        public List<Commodity> GetPurchaseList()
+        public List<Commodity> GetPurch2aseList()
         {
             return _commodities;
         }
 
-        public void BalanceReduction(int sum)
+        public void DecreaseBalance(int sum)
         {
             Money -= sum;
         }
 
-        public void Deleteurchase()
+        public void DeletePurchase()
         {
             Random random = new Random();
 
@@ -197,6 +173,28 @@ namespace supermarket
             {
                 _commodities.RemoveAt(random.Next(0, _commodities.Count));
             }
+        }
+
+        public void ShowPurchases()
+        {
+            Console.WriteLine("Список ваших покупок:\n");
+
+            for (int i = 0; i < _commodities.Count; i++)
+            {
+                Console.WriteLine(_commodities[i].Title + "\n");
+            }
+        }
+
+        public int GetAmountPurchases(Buyer buyer)
+        {
+            int sum = 0;
+
+            for (int i = 0; i < _commodities.Count; i++)
+            {
+                sum += _commodities[i].Price;
+            }
+
+            return sum;
         }
     }
 }
