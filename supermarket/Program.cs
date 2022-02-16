@@ -14,13 +14,15 @@ namespace supermarket
                                                  new Buyer("Vasa", 10),
                                                  new Buyer("Kiril", 25),
                                                  new Buyer("Den", 30) };
-
             List<Commodity> showcase = new List<Commodity> { new Commodity("Рыба", 10),
                                                              new Commodity("Мясо", 20),
                                                              new Commodity("Колбаса", 15),
                                                              new Commodity("Печение", 20)};
 
             Supermarket supermarket = new Supermarket(buyers, showcase);
+
+            supermarket.CreatePurchase();
+            supermarket.ServeCustomers();
         }
     }
 
@@ -36,10 +38,6 @@ namespace supermarket
         {
             _buyers = buyers;
             _showcase = showcase;
-
-            CreatePurchase();
-
-            ServeCustomers();
         }
 
         public void ServeCustomers()
