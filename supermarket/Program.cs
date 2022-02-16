@@ -29,10 +29,7 @@ namespace supermarket
 
         private Queue<Buyer> _queueBuyers = new Queue<Buyer>();
         private List<Commodity> _showcase = new List<Commodity>();
-        private List<Buyer> _buyers = new List<Buyer> { new Buyer("Dima",100),
-                                                       new Buyer("Vasa",10),
-                                                       new Buyer("Kiril",25),
-                                                       new Buyer("Den",30)};
+        private List<Buyer> _buyers = new List<Buyer>();
 
         public void ServeCustomers()
         {
@@ -108,13 +105,13 @@ namespace supermarket
 
         private int GetAmountPurchases(Buyer buyer)
         {
-            List<Commodity> shopping = buyer.GetPurchaseList();
+            List<Commodity> Purchase = buyer.GetPurchaseList();
 
             int sum = 0;
 
-            for (int i = 0; i < shopping.Count; i++)
+            for (int i = 0; i < Purchase.Count; i++)
             {
-                sum += shopping[i].Price;
+                sum += Purchase[i].Price;
             }
 
             return sum;
