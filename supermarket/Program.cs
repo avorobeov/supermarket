@@ -18,7 +18,7 @@ namespace supermarket
             supermarket.FillingListBuyers(new Buyer("Den", 30));
 
             supermarket.FillShowcase();
-            supermarket.CreateShopping();
+            supermarket.CreatePurchase();
             supermarket.ServeCustomers();
         }
     }
@@ -77,7 +77,7 @@ namespace supermarket
             }
         }
 
-        public void CreateShopping()
+        public void CreatePurchase()
         {
             int maximumNumberPurchases = 10;
             int minimalNumberPurchases = 1;
@@ -86,7 +86,7 @@ namespace supermarket
             {
                 for (int p = 0; p < _random.Next(0,maximumNumberPurchases); p++)
                 {
-                    _buyers[i].TakeShopping(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
+                    _buyers[i].TakePurchase(_showcase[_random.Next(minimalNumberPurchases, _showcase.Count())]);
                 }
 
                 _queueBuyers.Enqueue(_buyers[i]);
@@ -108,7 +108,7 @@ namespace supermarket
 
         private int GetAmountPurchases(Buyer buyer)
         {
-            List<Commodity> shopping = buyer.GetShoppingList();
+            List<Commodity> shopping = buyer.GetPurchaseList();
 
             int sum = 0;
 
@@ -132,7 +132,7 @@ namespace supermarket
       
         private void ShowPurchases(Buyer buyer)
         {
-            List<Commodity> shopping = buyer.GetShoppingList();
+            List<Commodity> shopping = buyer.GetPurchaseList();
 
             ShowMessage("Список ваших покупок:\n", ConsoleColor.Blue);
 
@@ -175,12 +175,12 @@ namespace supermarket
             Money = money;
         }
 
-        public void TakeShopping(Commodity commodity)
+        public void TakePurchase(Commodity commodity)
         {
             _commodities.Add(commodity);
         }
 
-        public List<Commodity> GetShoppingList()
+        public List<Commodity> GetPurchaseList()
         {
             return _commodities;
         }
