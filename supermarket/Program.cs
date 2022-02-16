@@ -12,8 +12,13 @@ namespace supermarket
         {
             Supermarket supermarket = new Supermarket();
 
-            supermarket.FillingShowcase();
-            supermarket.GetShopping();
+            supermarket.FillingListBuyers(new Buyer("Dima", 100));
+            supermarket.FillingListBuyers(new Buyer("Vasa", 10));
+            supermarket.FillingListBuyers(new Buyer("Kiril", 25));
+            supermarket.FillingListBuyers(new Buyer("Den", 30));
+
+            supermarket.FillShowcase();
+            supermarket.CreateShopping();
             supermarket.ServeCustomers();
         }
     }
@@ -72,7 +77,7 @@ namespace supermarket
             }
         }
 
-        public void GetShopping()
+        public void CreateShopping()
         {
             int maximumNumberPurchases = 10;
             int minimalNumberPurchases = 1;
@@ -88,12 +93,17 @@ namespace supermarket
             }
         }
 
-        public void FillingShowcase()
+        public void FillShowcase()
         {
             _showcase.Add(new Commodity("Рыба", 10));
             _showcase.Add(new Commodity("Мясо", 20));
             _showcase.Add(new Commodity("Колбаса", 15));
             _showcase.Add(new Commodity("Печение", 20));
+        }
+
+        public void FillingListBuyers(Buyer buyer)
+        {
+            _buyers.Add(buyer);
         }
 
         private int GetAmountPurchases(Buyer buyer)
