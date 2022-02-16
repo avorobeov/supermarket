@@ -154,11 +154,6 @@ namespace supermarket
             _commodities.Add(commodity);
         }
 
-        public List<Commodity> GetPurch2aseList()
-        {
-            return _commodities;
-        }
-
         public void DecreaseBalance(int sum)
         {
             Money -= sum;
