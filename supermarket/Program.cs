@@ -30,9 +30,9 @@ namespace supermarket
     {
         private Random _random = new Random();
 
+        private List<Commodity> _showcase;
+        private List<Buyer> _buyers;
         private Queue<Buyer> _queueBuyers = new Queue<Buyer>();
-        private List<Commodity> _showcase = new List<Commodity>();
-        private List<Buyer> _buyers = new List<Buyer>();
 
         public Supermarket(List<Buyer> buyers, List<Commodity> showcase)
         {
